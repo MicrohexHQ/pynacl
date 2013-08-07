@@ -73,8 +73,18 @@ ffi.cdef(
     """
 )
 
+if 0:
+    from os.path import dirname, join, isdir
+    prefix = join(dirname(dirname(__file__)),"build-libsodium")
+    if not isdir(prefix):
+        prefix = join(dirname(__file__), "build-libsodium")
+    assert isdir(prefix), prefix
+    print "PREFIX", prefix
 
-lib = ffi.verify("#include <sodium.h>", libraries=["sodium"])
+lib = ffi.verify("#include <sodium.h>",
+                 #include_dirs=[join(prefix,"include")],
+                 #library_dirs=[join(prefix,"lib")],
+                 libraries=["sodium"])
 
 
 # This works around a bug in PyPy where CFFI exposed functions do not have a

@@ -3,6 +3,7 @@ import sys
 
 from setuptools import setup
 from setuptools.command.test import test as TestCommand
+from distutils.command.build import build as _build
 
 import nacl
 
@@ -15,6 +16,12 @@ else:
     # building bdist - cffi is here!
     ext_modules = [nacl.nacl.ffi.verifier.get_extension()]
 
+class Build(_build):
+    def run(self):
+        _build.run(self)
+        # after building the python code, build libsodium and install it into
+        # the build directory
+        print "HERE"
 
 class PyTest(TestCommand):
     def finalize_options(self):
@@ -57,7 +64,7 @@ setup(
     ext_modules=ext_modules,
 
     zip_safe=False,
-    cmdclass={"test": PyTest},
+    cmdclass={"test": PyTest, "build": Build},
 
     classifiers=[
         "Programming Language :: Python :: Implementation :: CPython",
