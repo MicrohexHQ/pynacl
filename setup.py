@@ -53,6 +53,11 @@ setup(
         "nacl.invoke",
     ],
 
+    #package_data={
+    #    "nacl": ["src/*", "include/*"],
+    #    },
+    include_package_data=True,
+
     ext_package="nacl",
     ext_modules=ext_modules,
 
